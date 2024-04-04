@@ -18,20 +18,23 @@
       }
       table {
         width: 100%;
-        align-content: center;
-        border-style: solid;
+        text-align: center;
+        border-collapse: collapse;
       }
       .top {
         color: white;
         background-color: #3cb371;
-        border-color: white;
-        padding: 10px;
       }
-      .bottom {
-        border-color: #3cb371;
-        border-width: 1px;
+
+      .none {
         padding: 15px;
-        align-content: center;
+        border-style: solid;
+        border-color: mediumseagreen;
+      }
+
+      th, td {
+        border: 1px solid darkgrey;
+        padding: 5px;
       }
     </style>
   </head>
@@ -65,9 +68,9 @@
   <div>
     <a href="/">홈</a>
     <a>|</a>
-    <a href="service/history.jsp">위치 히스토리 목록</a>
+    <a href="history.jsp">위치 히스토리 목록</a>
     <a>|</a>
-    <a href="service/load-wifi.jsp">Open API 와이파이 정보 가져오기</a>
+    <a href="load-wifi.jsp">Open API 와이파이 정보 가져오기</a>
   </div>
   <br/>
 
@@ -96,8 +99,8 @@
   </div>
 
   <div>
-    <table class="top">
-      <tr>
+    <table>
+      <tr class="top" style="border-color: white; padding: 20px">
         <td scope="col">거리(Km)</td>
         <td scope="col">관리번호</td>
         <td scope="col">자치구</td>
@@ -116,31 +119,51 @@
         <td scope="col">Y좌표</td>
         <td scope="col">작업일자</td>
       </tr>
-    </table>
-    <table class="bottom">
-      <tr style="border-style: solid" a>
-        <%
-          if (lat == null && lnt == null || lat.equals("") || lnt.equals("")) {
-        %>
-        <td colspan="17" align="center">
+
+      <%
+        if (lat == null && lnt == null || lat.equals("") || lnt.equals("")) {
+      %>
+      <tr class="none" style="border: 1px darkgrey" >
+        <td colspan="17" align="center" style="padding: 20px">
           위치 정보를 입력한 후에 조회해 주세요.
         </td>
+      </tr>
         <%
           } else {
             WifiService wifiService = new WifiService();
             wifiService.prepareService();
 
-
+            wifiService.insertUserInfo(request);
 
             List<Wifi> list = wifiService.nearWifiInfo();
             wifiService.endService();
+
+            for (int i = 0; i < list.size(); i++) {
+              Wifi item = list.get(i);
+
         %>
-        <td colspan="17" align="center">
-          <%
-            out.println(list.size());
-          %>
-        </td>
+      <tr class="detail" <% if(i % 2 == 1){%> bgcolor="#d3d3d3" <%}%> >
+
+        <td><%=item.getDISTANCE()%></td>
+        <td><%=item.getX_SWIFI_MGR_NO()%></td>
+        <td><%=item.getX_SWIFI_WRDOFC()%></td>
+        <td><%=item.getX_SWIFI_MAIN_NM()%></td>
+        <td><%=item.getX_SWIFI_ADRES1()%></td>
+        <td><%=item.getX_SWIFI_ADRES2()%></td>
+        <td><%=item.getX_SWIFI_INSTL_FLOOR()%></td>
+        <td><%=item.getX_SWIFI_INSTL_TY()%></td>
+        <td><%=item.getX_SWIFI_INSTL_MBY()%></td>
+        <td><%=item.getX_SWIFI_SVC_SE()%></td>
+        <td><%=item.getX_SWIFI_CMCWR()%></td>
+        <td><%=item.getX_SWIFI_CNSTC_YEAR()%></td>
+        <td><%=item.getX_SWIFI_INOUT_DOOR()%></td>
+        <td><%=item.getX_SWIFI_REMARS3()%></td>
+        <td><%=item.getLAT()%></td>
+        <td><%=item.getLNT()%></td>
+        <td><%=item.getWORK_DTTM()%></td>
         <%
+
+            }
           }
         %>
       </tr>

@@ -5,10 +5,10 @@ package org.project.public_wifi_project.service;
 import com.google.gson.*;
 import org.project.public_wifi_project.db.DbConst;
 import org.project.public_wifi_project.db.DbControl;
+import org.project.public_wifi_project.domain.LocationHistory;
 import org.project.public_wifi_project.domain.Wifi;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,7 +19,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -176,7 +176,7 @@ public class WifiService {
         LinkedList<Wifi> nearWifiList = new LinkedList<>();
         ResultSet rs;
 
-        String nearWifiSql = "select round(d.DISTANCE*10, 4) distance, w.*\n" +
+        String nearWifiSql = "select round(d.DISTANCE, 4) distance, w.*\n" +
                 "from public_wifi_list w\n" +
                 "join distance_info d\n" +
                 "where d.X_SWIFI_MGR_NO == w.X_SWIFI_MGR_NO\n" +
@@ -220,6 +220,62 @@ public class WifiService {
     }
 
 
+    public void insertUserInfo(HttpServletRequest request) {
+
+        String userInfoSql = "insert into user_location (X_AXIS, Y_AXIS, SEARCH_DATE) \n" +
+                "values (?, ?, ?);";
+
+        try {
+            preparedStatement = connection.prepareStatement(userInfoSql);
+            preparedStatement.setString(1, request.getParameter("lnt"));
+            preparedStatement.setString(2, request.getParameter("lat"));
+            preparedStatement.setString(3, String.valueOf(LocalDateTime.now()));
+
+            preparedStatement.executeUpdate();
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<LocationHistory> locationHistory() {
+
+        List<LocationHistory> list = new LinkedList<>();
+        String historySql = "select * from user_location order by SEARCH_DATE desc;";
+
+        try {
+            preparedStatement = connection.prepareStatement(historySql);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                LocationHistory history = new LocationHistory();
+                history.setUserNo(rs.getInt("USER_NO"));
+                history.setXAxis(rs.getDouble("X_AXIS"));
+                history.setYAxis(rs.getDouble("Y_AXIS"));
+                history.setDate(rs.getString("SEARCH_DATE"));
+                list.add(history);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return list;
+    }
+
+    public void deleteLocation(int userNo) {
+        String deleteLocationSql = "delete * from user_location where USER_NO = ?;";
+
+        try {
+            preparedStatement = connection.prepareStatement(deleteLocationSql);
+            preparedStatement.setInt(1, userNo);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 }

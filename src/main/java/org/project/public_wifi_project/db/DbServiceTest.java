@@ -1,6 +1,7 @@
 package org.project.public_wifi_project.db;
 
 
+import org.project.public_wifi_project.domain.LocationHistory;
 import org.project.public_wifi_project.domain.Wifi;
 import org.project.public_wifi_project.service.WifiService;
 
@@ -14,12 +15,10 @@ public class DbServiceTest {
 
         wifiService.prepareService();
 
-        List<Wifi> list = wifiService.nearWifiInfo();
-
-        for (Wifi wifi : list) {
-            System.out.println(wifi.toString());
+        List<LocationHistory> histories = wifiService.locationHistory();
+        for (LocationHistory history : histories) {
+            System.out.println(history.toString());
         }
-        System.out.println(list.size());
 
         wifiService.endService();
 
