@@ -1,7 +1,10 @@
 package org.project.public_wifi_project.db;
 
 
+import org.project.public_wifi_project.domain.Wifi;
 import org.project.public_wifi_project.service.WifiService;
+
+import java.util.List;
 
 public class DbServiceTest {
 
@@ -11,17 +14,14 @@ public class DbServiceTest {
 
         wifiService.prepareService();
 
-        int cnt = wifiService.getTotalDataNum(DbConst.AUTHENTICATION_KEY);
+        List<Wifi> list = wifiService.nearWifiInfo();
 
-        for (int i = 1; i <= cnt; i = i + 1000) {
-            int startPage = i;
-            int endPage = Math.min((i + 999), cnt);
-            String result1 = wifiService.getJsonToApi(DbConst.AUTHENTICATION_KEY, startPage + "", endPage + "");
-            wifiService.parsingJsonToWifi(result1);
+        for (Wifi wifi : list) {
+            System.out.println(wifi.toString());
         }
+        System.out.println(list.size());
 
         wifiService.endService();
-        System.out.println(cnt);
 
 
     }

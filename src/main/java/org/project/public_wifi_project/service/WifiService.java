@@ -7,6 +7,8 @@ import org.project.public_wifi_project.db.DbConst;
 import org.project.public_wifi_project.db.DbControl;
 import org.project.public_wifi_project.domain.Wifi;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,8 +17,11 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class WifiService {
@@ -113,6 +118,11 @@ public class WifiService {
         JsonElement jsonElement = jsonObject.get(DbConst.SERVICE_NAME);
         JsonArray wifiArray = (JsonArray) jsonElement.getAsJsonObject().get("row");
 
+        try {
+            connection.setAutoCommit(false);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         for (int i = 0; i < wifiArray.size(); i++) {
             String string = wifiArray.get(i).toString();
             Wifi wifi = gson.fromJson(string, Wifi.class);
@@ -161,6 +171,55 @@ public class WifiService {
             System.out.println("Fail insert!!" + e.getMessage());
         }
     }
+
+    public List<Wifi> nearWifiInfo() {
+        LinkedList<Wifi> nearWifiList = new LinkedList<>();
+        ResultSet rs;
+
+        String nearWifiSql = "select round(d.DISTANCE*10, 4) distance, w.*\n" +
+                "from public_wifi_list w\n" +
+                "join distance_info d\n" +
+                "where d.X_SWIFI_MGR_NO == w.X_SWIFI_MGR_NO\n" +
+                "order by DISTANCE\n" +
+                "limit 20;";
+
+
+        try {
+            preparedStatement = connection.prepareStatement(nearWifiSql);
+            rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Wifi wifi = new Wifi();
+                wifi.setX_SWIFI_MGR_NO(rs.getString("X_SWIFI_MGR_NO"));
+                wifi.setX_SWIFI_WRDOFC(rs.getString("X_SWIFI_WRDOFC"));
+                wifi.setX_SWIFI_MAIN_NM(rs.getString("X_SWIFI_MAIN_NM"));
+                wifi.setX_SWIFI_ADRES1(rs.getString("X_SWIFI_ADRES1"));
+                wifi.setX_SWIFI_ADRES2(rs.getString("X_SWIFI_ADRES2"));
+                wifi.setX_SWIFI_INSTL_FLOOR(rs.getString("X_SWIFI_INSTL_FLOOR"));
+                wifi.setX_SWIFI_INSTL_TY(rs.getString("X_SWIFI_INSTL_TY"));
+                wifi.setX_SWIFI_INSTL_MBY(rs.getString("X_SWIFI_INSTL_MBY"));
+                wifi.setX_SWIFI_SVC_SE(rs.getString("X_SWIFI_SVC_SE"));
+                wifi.setX_SWIFI_CMCWR(rs.getString("X_SWIFI_CMCWR"));
+                wifi.setX_SWIFI_CNSTC_YEAR(rs.getString("X_SWIFI_CNSTC_YEAR"));
+                wifi.setX_SWIFI_INOUT_DOOR(rs.getString("X_SWIFI_INOUT_DOOR"));
+                wifi.setX_SWIFI_REMARS3(rs.getString("X_SWIFI_REMARS3"));
+                wifi.setLAT(rs.getDouble("LAT"));
+                wifi.setLNT(rs.getDouble("LNT"));
+                wifi.setWORK_DTTM(rs.getString("WORK_DTTM"));
+                wifi.setDISTANCE(rs.getDouble("DISTANCE"));
+
+                nearWifiList.add(wifi);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return nearWifiList;
+    }
+
+
 
 
 }

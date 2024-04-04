@@ -1,4 +1,7 @@
-<%@ page import="org.project.public_wifi_project.db.DbConst" %><%--
+<%@ page import="org.project.public_wifi_project.db.DbConst" %>
+<%@ page import="org.project.public_wifi_project.service.WifiService" %>
+<%@ page import="java.util.List" %>
+<%@ page import="org.project.public_wifi_project.domain.Wifi" %><%--
   Created by IntelliJ IDEA.
   User: seokhyeong
   Date: 3/31/24
@@ -124,9 +127,18 @@
         </td>
         <%
           } else {
+            WifiService wifiService = new WifiService();
+            wifiService.prepareService();
+
+
+
+            List<Wifi> list = wifiService.nearWifiInfo();
+            wifiService.endService();
         %>
         <td colspan="17" align="center">
-          위치 정보확인.
+          <%
+            out.println(list.size());
+          %>
         </td>
         <%
           }

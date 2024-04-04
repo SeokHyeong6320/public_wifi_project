@@ -30,6 +30,8 @@ public class Wifi {
 
     private String WORK_DTTM; // 작업일자
 
+    private Double DISTANCE;
+
 
 
 

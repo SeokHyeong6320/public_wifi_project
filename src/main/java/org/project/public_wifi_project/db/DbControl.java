@@ -25,7 +25,7 @@ public class DbControl {
 
         try {
             connection = DriverManager.getConnection(DbConst.DB_URL);
-            connection.setAutoCommit(false);
+
             System.out.println("success start dbConnection");
 
         } catch (SQLException e) {
