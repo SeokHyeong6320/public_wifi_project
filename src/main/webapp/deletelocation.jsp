@@ -1,4 +1,5 @@
-<%@ page import="org.project.public_wifi_project.service.WifiService" %><%--
+<%@ page import="org.project.public_wifi_project.repository.WifiRepository" %>
+<%--
   Created by IntelliJ IDEA.
   User: seokhyeong
   Date: 4/5/24
@@ -15,10 +16,10 @@
 <%
     int userNo = Integer.parseInt(request.getParameter("user_no"));
 
-    WifiService wifiService = new WifiService();
-    wifiService.prepareService();
-    wifiService.deleteLocation(userNo);
-    wifiService.endService();
+    WifiRepository wifiRepository = new WifiRepository();
+    wifiRepository.prepareService();
+    wifiRepository.deleteLocation(userNo);
+    wifiRepository.endService();
 
 %>
 

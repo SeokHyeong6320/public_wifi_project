@@ -1,7 +1,8 @@
 <%@ page import="org.project.public_wifi_project.db.DbConst" %>
-<%@ page import="org.project.public_wifi_project.service.WifiService" %>
+<%@ page import="org.project.public_wifi_project.repository.WifiRepository" %>
 <%@ page import="java.util.List" %>
-<%@ page import="org.project.public_wifi_project.domain.Wifi" %><%--
+<%@ page import="org.project.public_wifi_project.domain.Wifi" %>
+<%@ page import="org.project.public_wifi_project.repository.WifiRepository" %><%--
   Created by IntelliJ IDEA.
   User: seokhyeong
   Date: 3/31/24
@@ -130,13 +131,13 @@
       </tr>
         <%
           } else {
-            WifiService wifiService = new WifiService();
-            wifiService.prepareService();
+            WifiRepository wifiRepository = new WifiRepository();
+            wifiRepository.prepareService();
 
-            wifiService.insertUserInfo(request);
+            wifiRepository.insertUserInfo(request);
 
-            List<Wifi> list = wifiService.nearWifiInfo();
-            wifiService.endService();
+            List<Wifi> list = wifiRepository.nearWifiInfo();
+            wifiRepository.endService();
 
             for (int i = 0; i < list.size(); i++) {
               Wifi item = list.get(i);
@@ -145,7 +146,7 @@
       <tr class="detail" <% if(i % 2 == 1){%> bgcolor="#d3d3d3" <%}%> >
 
         <td><%=item.getDISTANCE()%></td>
-        <td><%=item.getX_SWIFI_MGR_NO()%></td>
+        <td><%=item.getX_SWIFI_MGR_NO()%>ddd</td>
         <td><%=item.getX_SWIFI_WRDOFC()%></td>
         <td><%=item.getX_SWIFI_MAIN_NM()%></td>
         <td><%=item.getX_SWIFI_ADRES1()%></td>

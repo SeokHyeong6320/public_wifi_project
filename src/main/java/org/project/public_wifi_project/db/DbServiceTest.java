@@ -2,8 +2,7 @@ package org.project.public_wifi_project.db;
 
 
 import org.project.public_wifi_project.domain.LocationHistory;
-import org.project.public_wifi_project.domain.Wifi;
-import org.project.public_wifi_project.service.WifiService;
+import org.project.public_wifi_project.repository.WifiRepository;
 
 import java.util.List;
 
@@ -11,35 +10,35 @@ public class DbServiceTest {
 
     public static void main(String[] args) {
 
-        WifiService wifiService = new WifiService();
+        WifiRepository wifiRepository = new WifiRepository();
 
-        wifiService.prepareService();
+        wifiRepository.prepareService();
 
-        List<LocationHistory> histories = wifiService.locationHistory();
+        List<LocationHistory> histories = wifiRepository.locationHistory();
         for (LocationHistory history : histories) {
             System.out.println(history.toString());
         }
 
-        wifiService.endService();
+        wifiRepository.endService();
 
 
     }
 
     public void start() {
-        WifiService wifiService = new WifiService();
+        WifiRepository wifiRepository = new WifiRepository();
 
-        wifiService.prepareService();
+        wifiRepository.prepareService();
 
-        int cnt = wifiService.getTotalDataNum(DbConst.AUTHENTICATION_KEY);
+        int cnt = wifiRepository.getTotalDataNum(DbConst.AUTHENTICATION_KEY);
 
         for (int i = 1; i <= cnt; i = i + 1000) {
             int startPage = i;
             int endPage = Math.min((i + 999), cnt);
-            String result1 = wifiService.getJsonToApi(DbConst.AUTHENTICATION_KEY, startPage + "", endPage + "");
-            wifiService.parsingJsonToWifi(result1);
+            String result1 = wifiRepository.getJsonToApi(DbConst.AUTHENTICATION_KEY, startPage + "", endPage + "");
+            wifiRepository.parsingJsonToWifi(result1);
         }
 
-        wifiService.endService();
+        wifiRepository.endService();
         System.out.println(cnt);
     }
 

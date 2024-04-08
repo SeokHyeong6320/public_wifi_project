@@ -1,6 +1,7 @@
-<%@ page import="org.project.public_wifi_project.service.WifiService" %>
+<%@ page import="org.project.public_wifi_project.repository.WifiRepository" %>
 <%@ page import="org.project.public_wifi_project.domain.LocationHistory" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="org.project.public_wifi_project.repository.WifiRepository" %><%--
   Created by IntelliJ IDEA.
   User: seokhyeong
   Date: 4/2/24
@@ -49,9 +50,9 @@
 </script>
 
 <%
-    WifiService wifiService = new WifiService();
-    wifiService.prepareService();
-    List<LocationHistory> histories = wifiService.locationHistory();
+    WifiRepository wifiRepository = new WifiRepository();
+    wifiRepository.prepareService();
+    List<LocationHistory> histories = wifiRepository.locationHistory();
 %>
 
 <h2>위치 히스토리 목록</h2>

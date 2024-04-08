@@ -1,4 +1,4 @@
-package org.project.public_wifi_project.service;
+package org.project.public_wifi_project.repository;
 
 
 
@@ -24,7 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class WifiService {
+public class WifiRepository {
 
     private Connection connection = null;
     private PreparedStatement preparedStatement = null;
@@ -265,7 +265,7 @@ public class WifiService {
     }
 
     public void deleteLocation(int userNo) {
-        String deleteLocationSql = "delete * from user_location where USER_NO = ?;";
+        String deleteLocationSql = "delete from user_location where USER_NO = ?;";
 
         try {
             preparedStatement = connection.prepareStatement(deleteLocationSql);

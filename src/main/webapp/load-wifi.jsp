@@ -2,8 +2,9 @@
 
 <%@ page import="org.project.public_wifi_project.domain.Wifi" %>
 <%@ page import="org.project.public_wifi_project.db.DbConst" %>
-<%@ page import="org.project.public_wifi_project.service.WifiService" %>
+<%@ page import="org.project.public_wifi_project.repository.WifiRepository" %>
 <%@ page import="org.project.public_wifi_project.db.DbServiceTest" %>
+<%@ page import="org.project.public_wifi_project.repository.WifiRepository" %>
 
 
 <%--
@@ -22,20 +23,20 @@
 
 
 <%
-    WifiService wifiService1 = new WifiService();
-    int cnt = wifiService1.getTotalDataNum(DbConst.AUTHENTICATION_KEY);
+    WifiRepository wifiRepository1 = new WifiRepository();
+    int cnt = wifiRepository1.getTotalDataNum(DbConst.AUTHENTICATION_KEY);
 
-    WifiService wifiService = new WifiService();
-    wifiService.prepareService();
+    WifiRepository wifiRepository = new WifiRepository();
+    wifiRepository.prepareService();
 
     for (int i = 1; i <= cnt; i = i + 1000) {
         int startPage = i;
         int endPage = Math.min((i + 999), cnt);
-        String result1 = wifiService.getJsonToApi(DbConst.AUTHENTICATION_KEY, startPage + "", endPage + "");
-        wifiService.parsingJsonToWifi(result1);
+        String result1 = wifiRepository.getJsonToApi(DbConst.AUTHENTICATION_KEY, startPage + "", endPage + "");
+        wifiRepository.parsingJsonToWifi(result1);
     }
 
-    wifiService.endService();
+    wifiRepository.endService();
 
 %>
 
