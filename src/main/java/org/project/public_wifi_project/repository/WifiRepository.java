@@ -3,7 +3,6 @@ package org.project.public_wifi_project.repository;
 
 
 import com.google.gson.*;
-import org.project.public_wifi_project.db.DbConst;
 import org.project.public_wifi_project.db.DbControl;
 import org.project.public_wifi_project.domain.LocationHistory;
 import org.project.public_wifi_project.domain.Wifi;
@@ -22,6 +21,8 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+
+import static org.project.public_wifi_project.db.DbConst.*;
 
 
 public class WifiRepository {
@@ -45,7 +46,7 @@ public class WifiRepository {
 
         JsonParser parser = new JsonParser();
         JsonObject jsonObject = (JsonObject) parser.parse(json);
-        JsonElement jsonElement = jsonObject.get(DbConst.SERVICE_NAME);
+        JsonElement jsonElement = jsonObject.get(SERVICE_NAME);
         String numStr = jsonElement.getAsJsonObject().get("list_total_count").getAsString();
 
         return Integer.parseInt(numStr);
@@ -65,7 +66,7 @@ public class WifiRepository {
             /*URL*/
             urlBuilder.append("/" + URLEncoder.encode(authenticationKey, "UTF-8"));
             urlBuilder.append("/" + URLEncoder.encode("json", "UTF-8"));
-            urlBuilder.append("/" + URLEncoder.encode(DbConst.SERVICE_NAME, "UTF-8"));
+            urlBuilder.append("/" + URLEncoder.encode(SERVICE_NAME, "UTF-8"));
             urlBuilder.append("/" + URLEncoder.encode(startPage, "UTF-8"));
             urlBuilder.append("/" + URLEncoder.encode(endPage, "UTF-8"));
 
@@ -115,7 +116,7 @@ public class WifiRepository {
         JsonParser parser = new JsonParser();
         Gson gson = new Gson();
         JsonObject jsonObject = (JsonObject) parser.parse(wifiList);
-        JsonElement jsonElement = jsonObject.get(DbConst.SERVICE_NAME);
+        JsonElement jsonElement = jsonObject.get(SERVICE_NAME);
         JsonArray wifiArray = (JsonArray) jsonElement.getAsJsonObject().get("row");
 
         try {

@@ -1,4 +1,3 @@
-<%@ page import="org.project.public_wifi_project.repository.WifiRepository" %>
 <%@ page import="org.project.public_wifi_project.domain.LocationHistory" %>
 <%@ page import="java.util.List" %>
 <%@ page import="org.project.public_wifi_project.repository.WifiRepository" %><%--
