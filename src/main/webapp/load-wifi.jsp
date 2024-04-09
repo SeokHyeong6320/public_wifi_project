@@ -1,6 +1,4 @@
-<%@ page import="org.project.public_wifi_project.repository.WifiRepository" %>
-<%@ page import="org.project.public_wifi_project.repository.WifiRepository" %>
-<%@ page import="static org.project.public_wifi_project.db.DbConst.*" %>
+<%@ page import="org.project.public_wifi_project.service.WifiService" %>
 
 
 <%--
@@ -17,27 +15,10 @@
 </head>
 <body>
 
-
 <%
-    WifiRepository wifiRepository1 = new WifiRepository();
-    int cnt = wifiRepository1.getTotalDataNum(AUTHENTICATION_KEY);
-
-    WifiRepository wifiRepository = new WifiRepository();
-    wifiRepository.prepareService();
-
-    for (int i = 1; i <= cnt; i = i + 1000) {
-        int startPage = i;
-        int endPage = Math.min((i + 999), cnt);
-        String result1 = wifiRepository.getJsonToApi(AUTHENTICATION_KEY, startPage + "", endPage + "");
-        wifiRepository.parsingJsonToWifi(result1);
-    }
-
-    wifiRepository.endService();
-
+    WifiService service = new WifiService();
+    int cnt = service.getWifiList();
 %>
-
-
-
 
 <h2 style="text-align: center;"><%=cnt%>개의 WIFI 정보를 정상적으로 저장하였습니다</h2>
 <p style="text-align: center;">

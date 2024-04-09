@@ -1,6 +1,6 @@
 <%@ page import="org.project.public_wifi_project.domain.LocationHistory" %>
 <%@ page import="java.util.List" %>
-<%@ page import="org.project.public_wifi_project.repository.WifiRepository" %><%--
+<%@ page import="org.project.public_wifi_project.service.WifiService" %><%--
   Created by IntelliJ IDEA.
   User: seokhyeong
   Date: 4/2/24
@@ -16,21 +16,15 @@
             padding: 2px;
         }
         table {
-            font-weight: bold;
             width: 100%;
             text-align: center;
             border-collapse: collapse;
         }
         .top {
             color: white;
-            background-color: #3cb371;
+            background-color: #00b173;
         }
 
-        .none {
-            padding: 15px;
-            border-style: solid;
-            border-color: mediumseagreen;
-        }
 
         th, td {
             border: 1px solid darkgrey;
@@ -47,12 +41,6 @@
         location.reload(); // 현재 페이지를 새로고침합니다.
     }
 </script>
-
-<%
-    WifiRepository wifiRepository = new WifiRepository();
-    wifiRepository.prepareService();
-    List<LocationHistory> histories = wifiRepository.locationHistory();
-%>
 
 <h2>위치 히스토리 목록</h2>
 <div>
@@ -73,10 +61,11 @@
         <td width="10%">비고</td>
     </tr>
     <%
-        if (!histories.isEmpty()) {
-    %>
+        WifiService service = new WifiService();
+        List<LocationHistory> histories = service.getLocationHistory();
 
-        <%
+        if (!histories.isEmpty()) {
+
             for (int i = 0; i < histories.size(); i++) {
                 LocationHistory history = histories.get(i);
                 int userNo = history.getUserNo();
@@ -86,7 +75,7 @@
         <td><%=history.getXAxis()%></td>
         <td><%=history.getYAxis()%></td>
         <td><%=history.getDate()%></td>
-        <td style="align-content: center">
+        <td align="center">
             <input type="button" value="삭제" onclick="location.href='deletelocation.jsp?user_no=<%=userNo%>'" >
         </td>
     </tr>

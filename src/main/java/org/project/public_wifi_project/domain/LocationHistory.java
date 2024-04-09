@@ -1,8 +1,6 @@
 package org.project.public_wifi_project.domain;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class LocationHistory {

@@ -1,8 +1,6 @@
-<%@ page import="org.project.public_wifi_project.db.DbConst" %>
-<%@ page import="org.project.public_wifi_project.repository.WifiRepository" %>
 <%@ page import="java.util.List" %>
 <%@ page import="org.project.public_wifi_project.domain.Wifi" %>
-<%@ page import="org.project.public_wifi_project.repository.WifiRepository" %><%--
+<%@ page import="org.project.public_wifi_project.service.WifiService" %><%--
   Created by IntelliJ IDEA.
   User: seokhyeong
   Date: 3/31/24
@@ -24,13 +22,13 @@
       }
       .top {
         color: white;
-        background-color: #3cb371;
+        background-color: #00b173;
       }
 
       .none {
         padding: 15px;
         border-style: solid;
-        border-color: mediumseagreen;
+        border-color: #00b173;
       }
 
       th, td {
@@ -86,10 +84,10 @@
 
   <div>
     <form action="" method="get">
-      <label>LAT</label>
+      <label>LAT:</label>
       <input name="lat" id="lat" type="text" value="<%=lat%>">
       ,
-      <label>LNT</label>
+      <label>LNT:</label>
       <input name="lnt" id="lnt" type="text" value="<%=lnt%>">
 
 
@@ -122,7 +120,7 @@
       </tr>
 
       <%
-        if (lat == null && lnt == null || lat.equals("") || lnt.equals("")) {
+        if (lat == null || lnt == null || lat.equals("") || lnt.equals("")) {
       %>
       <tr class="none" style="border: 1px darkgrey" >
         <td colspan="17" align="center" style="padding: 20px">
@@ -131,22 +129,16 @@
       </tr>
         <%
           } else {
-            WifiRepository wifiRepository = new WifiRepository();
-            wifiRepository.prepareService();
+            WifiService service = new WifiService();
+            List<Wifi> nearWifiInfo = service.getNearWifiInfo(request);
 
-            wifiRepository.insertUserInfo(request);
-
-            List<Wifi> list = wifiRepository.nearWifiInfo();
-            wifiRepository.endService();
-
-            for (int i = 0; i < list.size(); i++) {
-              Wifi item = list.get(i);
-
+            for (int i = 0; i < nearWifiInfo.size(); i++) {
+              Wifi item = nearWifiInfo.get(i);
         %>
-      <tr class="detail" <% if(i % 2 == 1){%> bgcolor="#d3d3d3" <%}%> >
+      <tr class="detail" <% if(i % 2 == 1){%> bgcolor="#d3d3d3" <%}%> align="left" >
 
         <td><%=item.getDISTANCE()%></td>
-        <td><%=item.getX_SWIFI_MGR_NO()%>ddd</td>
+        <td><%=item.getX_SWIFI_MGR_NO()%></td>
         <td><%=item.getX_SWIFI_WRDOFC()%></td>
         <td><%=item.getX_SWIFI_MAIN_NM()%></td>
         <td><%=item.getX_SWIFI_ADRES1()%></td>
@@ -163,7 +155,6 @@
         <td><%=item.getLNT()%></td>
         <td><%=item.getWORK_DTTM()%></td>
         <%
-
             }
           }
         %>

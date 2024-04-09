@@ -3,6 +3,7 @@ package org.project.public_wifi_project.db;
 
 import org.project.public_wifi_project.domain.LocationHistory;
 import org.project.public_wifi_project.repository.WifiRepository;
+import org.project.public_wifi_project.service.WifiService;
 
 import java.util.List;
 
@@ -10,18 +11,11 @@ public class DbServiceTest {
 
     public static void main(String[] args) {
 
-        WifiRepository wifiRepository = new WifiRepository();
-
-        wifiRepository.prepareService();
-
-        List<LocationHistory> histories = wifiRepository.locationHistory();
-        for (LocationHistory history : histories) {
-            System.out.println(history.toString());
-        }
-
-        wifiRepository.endService();
+        WifiService wifiService = new WifiService();
+        int cnt = wifiService.getWifiList();
 
 
+        System.out.println(cnt);
     }
 
     public void start() {
