@@ -61,6 +61,13 @@
 
 
   </script>
+  <%
+    String lat = request.getParameter("lat");
+    String lnt = request.getParameter("lnt");
+    if (lat == null || lat.equals("")) lat = "";
+    if (lnt == null || lnt.equals("")) lnt = "";
+
+  %>
 
   <body>
   <h2>와이파이 정보 구하기</h2>
@@ -73,22 +80,13 @@
   </div>
   <br/>
 
-  <%
-    String lat = request.getParameter("lat");
-    String lnt = request.getParameter("lnt");
-    if (lat == null || lat.equals("")) lat = "";
-    if (lnt == null || lnt.equals("")) lnt = "";
-
-  %>
-
-
   <div>
     <form action="" method="get">
       <label>LAT:</label>
-      <input name="lat" id="lat" type="text" value="<%=lat%>">
+      <input name="lat" id="lat" type="text" value="<%=lat.isEmpty()?"0.0":lat%>">
       ,
       <label>LNT:</label>
-      <input name="lnt" id="lnt" type="text" value="<%=lnt%>">
+      <input name="lnt" id="lnt" type="text" value="<%=lnt.isEmpty()?"0.0":lnt%>">
 
 
       <input type="button" value="내 위치 가져오기" onclick="userLocation()">
@@ -103,11 +101,11 @@
         <td scope="col">거리(Km)</td>
         <td scope="col">관리번호</td>
         <td scope="col">자치구</td>
-        <td scope="col">와이파이명</td>
-        <td scope="col">도로명주소</td>
-        <td scope="col">상세주소</td>
+        <td scope="col" width="7%">와이파이명</td>
+        <td scope="col" width="10%">도로명주소</td>
+        <td scope="col" width="15%">상세주소</td>
         <td scope="col">설치위치(층)</td>
-        <td scope="col">설치유형</td>
+        <td scope="col" width="7%">설치유형</td>
         <td scope="col">설치기관</td>
         <td scope="col">서비스구분</td>
         <td scope="col">망종류</td>
